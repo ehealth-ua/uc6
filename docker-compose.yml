@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  uc6_api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        - APP_NAME=uc6_api
+    image: uc6_api
+    container_name: uc6_api
+    env_file:
+      - .env.dev
+    depends_on:
+      - postgres
+    ports:
+      - 4000:4000
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/uc6_api:cached
+
+  uc6_worker:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        - APP_NAME=uc6_worker
+    image: uc6_worker
+    container_name: uc6_worker
+    env_file:
+      - .env.dev
+    depends_on:
+      - postgres
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/uc6_worker:cached
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432
+    volumes:
+      - postgres:/var/lib/postgresql
+
+volumes:
+  postgres:

@@ -1,0 +1,28 @@
+# The directory Mix will write compiled artifacts to.
+_build
+
+# The directory Mix downloads your dependencies sources to.
+deps
+
+# If you run "mix test --cover", coverage assets end up here.
+cover
+
+# If the VM crashes, it generates a dump, let's ignore it too.
+erl_crash.dump
+
+# Ignore git artifacts
+.gitignore
+.gitmodules
+
+# Ignore Docker artifacts
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Ignore markdown description
+README.md
+LICENSE.md
+
+# Envinonment configuration
+.env.dev
+.env.example
