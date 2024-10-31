@@ -1,4 +1,6 @@
-# UC6
+# UC6 Potential
+
+For documentation please refer to OpenAPI 3.0+ spec: <a href="https://uc6prescription.docs.apiary.io/">uc6prescription.docs.apiary.io</a>.
 
 ## Setup
 
