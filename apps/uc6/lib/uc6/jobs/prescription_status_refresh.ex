@@ -7,7 +7,7 @@ defmodule EHCS.UC6.Jobs.PrescriptionStatusRefresh do
   use Worker, queue: :prescrtiption_status
 
   @impl true
-  def perform(%Job{args: %{"prescription_id" => _push_message_id}}) do
+  def perform(%Job{args: %{"prescription_id" => _prescription_id}}) do
       :ok
   end
 end

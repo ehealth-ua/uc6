@@ -24,7 +24,7 @@ defmodule EHCS.UC6.Prescriptions do
     result = Repo.get(Prescription, id)
 
     case result do
-      nil -> {:error, :push_message_not_found}
+      nil -> {:error, :prescription_not_found}
       _ -> {:ok, result}
     end
   end
@@ -58,13 +58,13 @@ defmodule EHCS.UC6.Prescriptions do
     )
   end
 
-  def change_status(%Prescription{} = push_message, status) do
-    Prescription.change_status(push_message, status)
+  def change_status(%Prescription{} = prescription, status) do
+    Prescription.change_status(prescription, status)
     |> Repo.update()
   end
 
-  def change_status(%Multi{} = multi, %Prescription{} = push_message, status) do
+  def change_status(%Multi{} = multi, %Prescription{} = prescription, status) do
     multi
-    |> Multi.update(:push_message, Prescription.change_status(push_message, status))
+    |> Multi.update(:prescription, Prescription.change_status(prescription, status))
   end
 end

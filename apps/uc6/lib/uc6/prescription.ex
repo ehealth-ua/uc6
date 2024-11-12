@@ -26,38 +26,41 @@ defmodule EHCS.UC6.Prescription do
 
   @expiration_period_seconds 300
 
-  def create_pending(tax_id, template_name, template_parameters, distribution_id) do
+  def create_pending(unzr, tax_id, patient_name, patient_age) do
     changeset(%__MODULE__{}, %{
       rnokpp: tax_id,
+      unzr: unzr,
+      patient_name: patient_name,
+      patient_age: patient_age,
       status: :pending,
       created_at: NaiveDateTime.utc_now(),
       changed_at: NaiveDateTime.utc_now(),
     })
   end
 
-  def change_status(%__MODULE__{} = push_message, status) do
-    changeset(push_message, %{
+  def change_status(%__MODULE__{} = prescription, status) do
+    changeset(prescription, %{
       status: status,
       changed_at: NaiveDateTime.utc_now()
     })
   end
 
-  def in_final_status?(%__MODULE__{} = push_message) do
-    push_message.status in [:read, :error]
+  def in_final_status?(%__MODULE__{} = prescription) do
+    prescription.status in [:read, :error]
   end
 
-  def expired?(%__MODULE__{} = push_message) do
+  def expired?(%__MODULE__{} = prescription) do
     diff =
       NaiveDateTime.diff(
-        push_message.status_timestamp,
-        push_message.created_at
+        prescription.changed_at,
+        prescription.created_at
       )
 
     diff > @expiration_period_seconds
   end
 
-  defp changeset(%__MODULE__{} = push_message, attrs = %{}) do
-    push_message
+  defp changeset(%__MODULE__{} = prescription, attrs = %{}) do
+    prescription
     |> Changeset.change(attrs)
     |> Changeset.validate_required([
       :rnokpp,
