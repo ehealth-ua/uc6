@@ -4,7 +4,7 @@ defmodule EHCS.UC6.Jobs.PrescriptionStatusRefresh do
   alias Oban.Worker
   alias Oban.Job
 
-  use Worker, queue: :prescrtiption_status
+  use Worker, queue: :prescription_status
 
   @impl true
   def perform(%Job{args: %{"prescription_id" => _prescription_id}}) do

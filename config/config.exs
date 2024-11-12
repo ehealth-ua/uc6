@@ -1,5 +1,11 @@
 import Config
 
+config :uc6, EHCS.UC6.Repo,
+  database: "uc6",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost"
+
 config :uc6,
   ecto_repos: [EHCS.UC6.Repo]
 
