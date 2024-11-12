@@ -7,7 +7,7 @@ defmodule EHCS.UC6.Prescription do
   @primary_key {:id, UUID, autogenerate: true}
   schema "prescriptions" do
     field(:request_number, :string)
-    field(:status, Ecto.Enum, values: [:base, :active, :dispensed, :expired, :declined])
+    field(:status, Ecto.Enum, values: [:pending, :active, :dispensed, :expired, :declined])
     field(:created_at, :naive_datetime_usec)
     field(:changed_at, :naive_datetime_usec)
     field(:dispense_valid_from, :string)
@@ -26,42 +26,46 @@ defmodule EHCS.UC6.Prescription do
 
   @expiration_period_seconds 300
 
-  def create_pending(tax_id, template_name, template_parameters, distribution_id) do
+  def create_pending(tax_id, unzr, patient_name, patient_age) do
     changeset(%__MODULE__{}, %{
       rnokpp: tax_id,
+      unzr: unzr,
       status: :pending,
+      patient_name: patient_name,
+      patient_age: patient_age,
       created_at: NaiveDateTime.utc_now(),
       changed_at: NaiveDateTime.utc_now(),
     })
   end
 
-  def change_status(%__MODULE__{} = push_message, status) do
-    changeset(push_message, %{
+  def change_status(%__MODULE__{} = prescription, status) do
+    changeset(prescription, %{
       status: status,
       changed_at: NaiveDateTime.utc_now()
     })
   end
 
-  def in_final_status?(%__MODULE__{} = push_message) do
-    push_message.status in [:read, :error]
+  def in_final_status?(%__MODULE__{} = prescription) do
+    prescription.status in [:pending, :active, :dispensed, :expired, :declined]
   end
 
-  def expired?(%__MODULE__{} = push_message) do
+  def expired?(%__MODULE__{} = presctiption) do
     diff =
       NaiveDateTime.diff(
-        push_message.status_timestamp,
-        push_message.created_at
+        presctiption.changed_at,
+        presctiption.created_at
       )
 
     diff > @expiration_period_seconds
   end
 
-  defp changeset(%__MODULE__{} = push_message, attrs = %{}) do
-    push_message
+  defp changeset(%__MODULE__{} = prescription, attrs = %{}) do
+    prescription
     |> Changeset.change(attrs)
     |> Changeset.validate_required([
       :rnokpp,
       :patient_name,
+      :patient_age,
       :status,
       :created_at
     ])
