@@ -28,7 +28,7 @@ defmodule EHCS.UC6.MixProject do
       {:ehealth_logger, github: "edenlabllc/ehealth_logger"},
       {:httpoison, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
-      {:oban, "~> 2.17"},
+      {:oban, "~> 2.17.12"},
       {:sweet_xml, "~> 0.7.1"},
       {:uuid, "~> 1.1" },
       {:xml_builder, "~> 2.1"}

@@ -6,12 +6,9 @@ config :uc6, EHCS.UC6.Repo,
   password: "postgres",
   hostname: "localhost"
 
-config :uc6,
-  ecto_repos: [EHCS.UC6.Repo]
+config :uc6, ecto_repos: [EHCS.UC6.Repo]
 
 config :uc6, EHCS.UC6.Channel, trembita_client: EHCS.UC6.Trembita
-
-config :uc6, Oban, repo: EHCS.UC6.Repo
 
 config :uc6_api, EHCS.UC6.API.Endpoint,
   url: [host: "localhost"],
@@ -33,10 +30,13 @@ config :logger, :console, metadata: :all
 
 config :phoenix, :json_library, Jason
 
+config :uc6, Oban,
+  repo: EHCS.UC6.Repo
+
 config :uc6_worker, Oban,
+  repo: EHCS.UC6.Repo,
   name: EHCS.UC6.Worker.Oban,
   queues: [prescription_status: 10],
-  repo: EHCS.UC6.Repo,
   plugins: [Oban.Plugins.Pruner]
 
 import_config "#{config_env()}.exs"
