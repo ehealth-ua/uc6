@@ -1,0 +1,101 @@
+FORMAT: 1A
+HOST: https://uc6.ehealth.gov.ua
+
+# Prescription
+
+## International ePrescriptions
+
+International Electronic Prescriptions (Use Case 6).
+
+### Create Prescription [POST /api/prescriptions]
+
++ Request (application/json)
+    + Attributes (object)
+        + `id`: `d290f1ee-6c54-4b01-90e6-d701748f0851` (string, required) - Identifier of person that is accosiated with user who initiated access token generation
+        + `request_number` (string, required)
+        + `status` (string, required)
+        + `created_at` (string, optional)
+        + `dispense_valid_from` (string, optional)
+        + `hospital_name` (string, required)
+        + `employee_name` (string, required)
+        + `patient_id` (number, required)
+        + `rnokpp` (number, required)
+        + `unzr` (number, required)
+        + `patient_name` (number, required)
+        + `patient_age` (number, required)
+        + `medicine` (string, required)
+        + `medication_qty` (string, required)
+        + `dosage_instruction` (string, required)
+        + `sign` (string, required) - ASN.1 DER encode ContentInfo
+
++ Response 201 (application/json)
+    + Attributes (`Prescription`)
+
++ Response 400 (application/json)
+    + Attributes (`Error`)
+
++ Response 422 (application/json)
+    + Attributes (`ValidationError`)
+
++ Response 500 (application/json)
+    + Attributes (`Error`)
+
+### Update Prescription [POST /api/prescriptions/{id}/change]
+
++ Request (application/json)
+    + Attributes
+        + `id`: `a48cc83a-7aad-47c6-9487-2a566dc669a7` (string, required)
+        + `status` (string, required)
+        + `changed_at` (string, required)
+
++ Response 200 (application/json)
+    + Attributes (`Prescription`)
+
++ Response 204
+
++ Response 500 (application/json)
+    + Attributes (`Error`)
+
+### Qualify Prescription [GET /api/prescriptions/{id}]
+
++ Request (application/json)
+    + Attributes
+        + `id`: `a48cc83a-7aad-47c6-9487-2a566dc669a7` (string, required)
+
++ Response 200 (application/json)
+    + Attributes (`Prescription`)
+
++ Response 204
+
++ Response 500 (application/json)
+    + Attributes (`Error`)
+
+# Data Structures
+
+## Prescription (object)
++ `id`: `d290f1ee-6c54-4b01-90e6-d701748f0851` (string, required) - Identifier of person that is accosiated with user who initiated access token generation
++ `request_number` (string, required)
++ `status` (string, required)
++ `created_at`: `2024-08-07 11:03:20.128570` (string, optional)
++ `dispense_valid_from` (string, optional)
++ `hospital_name` (string, required)
++ `employee_name` (string, required)
++ `patient_id` (number, required)
++ `rnokpp` (number, required)
++ `unzr` (number, required)
++ `patient_name` (number, required)
++ `patient_age` (number, required)
++ `medicine` (string, required)
++ `medication_qty` (string, required)
++ `dosage_instruction` (string, required)
++ `sign` (string, required)
++ `qr` (string, required)
+
+## ValidationError (Error)
+- `type`: `validation_error` (fixed)
+- `message`: `Validation failed` (string, required)
+- `errors` (object, required)
+
+## Error (object)
++ `type`: `example_error` (string, required) - Machine-readable error type
++ `message`: `Example error message` (string, required) - Human-readable error description
