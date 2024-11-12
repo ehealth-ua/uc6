@@ -7,7 +7,7 @@ defmodule EHCS.UC6.Prescription do
   @primary_key {:id, UUID, autogenerate: true}
   schema "prescriptions" do
     field(:request_number, :string)
-    field(:status, Ecto.Enum, values: [:base, :active, :dispensed, :expired, :declined])
+    field(:status, Ecto.Enum, values: [:pending, :active, :dispensed, :expired, :declined])
     field(:created_at, :naive_datetime_usec)
     field(:changed_at, :naive_datetime_usec)
     field(:dispense_valid_from, :string)
@@ -30,9 +30,9 @@ defmodule EHCS.UC6.Prescription do
     changeset(%__MODULE__{}, %{
       rnokpp: tax_id,
       unzr: unzr,
+      status: :pending,
       patient_name: patient_name,
       patient_age: patient_age,
-      status: :pending,
       created_at: NaiveDateTime.utc_now(),
       changed_at: NaiveDateTime.utc_now(),
     })
@@ -46,14 +46,14 @@ defmodule EHCS.UC6.Prescription do
   end
 
   def in_final_status?(%__MODULE__{} = prescription) do
-    prescription.status in [:read, :error]
+    prescription.status in [:pending, :active, :dispensed, :expired, :declined]
   end
 
-  def expired?(%__MODULE__{} = prescription) do
+  def expired?(%__MODULE__{} = presctiption) do
     diff =
       NaiveDateTime.diff(
-        prescription.changed_at,
-        prescription.created_at
+        presctiption.changed_at,
+        presctiption.created_at
       )
 
     diff > @expiration_period_seconds
@@ -65,6 +65,7 @@ defmodule EHCS.UC6.Prescription do
     |> Changeset.validate_required([
       :rnokpp,
       :patient_name,
+      :patient_age,
       :status,
       :created_at
     ])
