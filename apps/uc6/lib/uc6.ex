@@ -1,17 +1,9 @@
 defmodule EHCS.UC6 do
   require Logger
-  alias EHCS.UC6.PushMessages
+  alias EHCS.UC6.Prescriptions
 
-  def get_push_message(push_message_id) when is_binary(push_message_id) do
-    PushMessages.get_push_message(push_message_id)
-  end
-
-  def search(tax_id \\ nil, limit \\ 100, offset \\ 0) do
-    PushMessages.search(tax_id, limit, offset)
-  end
-
-  def send_push_message(person_id, tax_id, title, summary, message) do
-      :ok
-  end
+  def get_prescription(prescription_id) when is_binary(prescription_id) do Prescriptions.get_prescription(prescription_id) end
+  def search(tax_id \\ nil, limit \\ 100, offset \\ 0) do Prescriptions.search(tax_id, limit, offset) end
+  def send_prescription(prescription_id, tax_id, patient_name) do :ok end
 
 end

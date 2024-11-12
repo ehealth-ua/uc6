@@ -29,7 +29,7 @@ config :phoenix, :json_library, Jason
 
 config :uc6_worker, Oban,
   name: EHCS.UC6.Worker.Oban,
-  queues: [push_message_status: 10],
+  queues: [prescription_status: 10],
   repo: EHCS.UC6.Repo,
   plugins: [Oban.Plugins.Pruner]
 

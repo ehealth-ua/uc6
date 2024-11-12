@@ -2,11 +2,11 @@ defmodule EHCS.UC6.API.DiiaPushRequestTest do
   use ExUnit.Case
 
   alias EHCS.UC6.API.ChangesetJSON
-  alias EHCS.UC6.API.PushMessageRequest
+  alias EHCS.UC6.API.PrescriptionRequest
 
   test "successful cast" do
     {:ok, request} =
-      PushMessageRequest.cast(%{
+      PrescriptionRequest.cast(%{
         "tax_id" => "1234567898",
         "template_name" => "TEMPLATE_NAME",
         "template_parameters" => %{
@@ -25,7 +25,7 @@ defmodule EHCS.UC6.API.DiiaPushRequestTest do
 
   test "cast with missing tax_id" do
     {:error, changeset} =
-      PushMessageRequest.cast(%{
+      PrescriptionRequest.cast(%{
         "template_name" => "TEMPLATE_NAME",
         "template_parameters" => %{
           "key1" => "value1"
@@ -38,7 +38,7 @@ defmodule EHCS.UC6.API.DiiaPushRequestTest do
 
   test "cast with missing template_name" do
     {:error, changeset} =
-      PushMessageRequest.cast(%{
+      PrescriptionRequest.cast(%{
         "tax_id" => "1234567898",
         "template_parameters" => %{
           "key1" => "value1"
@@ -51,7 +51,7 @@ defmodule EHCS.UC6.API.DiiaPushRequestTest do
 
   test "cast with missing template_parameters" do
     {:ok, request} =
-      PushMessageRequest.cast(%{
+      PrescriptionRequest.cast(%{
         "tax_id" => "1234567898",
         "template_name" => "TEMPLATE_NAME"
       })
@@ -65,7 +65,7 @@ defmodule EHCS.UC6.API.DiiaPushRequestTest do
 
   test "cast with missing nil template_parameters" do
     {:ok, request} =
-      PushMessageRequest.cast(%{
+      PrescriptionRequest.cast(%{
         "tax_id" => "1234567898",
         "template_name" => "TEMPLATE_NAME",
         "template_parameters" => nil

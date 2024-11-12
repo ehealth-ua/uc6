@@ -1,8 +1,8 @@
 defmodule EHCS.UC6.Jobs.Scheduler do
-  alias EHCS.UC6.Jobs.PushMessageStatusRefresh
+  alias EHCS.UC6.Jobs.PrescriptionStatusRefresh
   alias Ecto.Multi
 
-  def schedule_push_message_status_refresh(%Multi{} = multi, schedule_in, push_message_id)
+  def schedule_prescription_status_refresh(%Multi{} = multi, schedule_in, push_message_id)
       when is_binary(push_message_id) do
     multi
     |> Oban.insert(
@@ -14,7 +14,7 @@ defmodule EHCS.UC6.Jobs.Scheduler do
     )
   end
 
-  def schedule_push_message_status_refresh(%Multi{} = multi, schedule_in, push_message_id_fun)
+  def schedule_prescription_status_refresh(%Multi{} = multi, schedule_in, push_message_id_fun)
       when is_function(push_message_id_fun) do
     multi
     |> Oban.insert(

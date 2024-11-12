@@ -1,38 +1,44 @@
-defmodule EHCS.UC6.PushMessage do
+defmodule EHCS.UC6.Prescription do
   use Ecto.Schema
 
   alias Ecto.Changeset
   alias Ecto.UUID
 
   @primary_key {:id, UUID, autogenerate: true}
-  schema "push_messages" do
-    field(:tax_id, :string)
-    field(:template_name, :string)
-    field(:template_parameters, {:map, :string})
-    field(:status, Ecto.Enum, values: [:pending, :sent, :read, :error])
-    field(:distribution_id, :string)
+  schema "prescriptions" do
+    field(:request_number, :string)
+    field(:status, Ecto.Enum, values: [:base, :active, :dispensed, :expired, :declined])
     field(:created_at, :naive_datetime_usec)
-    field(:status_timestamp, :naive_datetime_usec)
+    field(:changed_at, :naive_datetime_usec)
+    field(:dispense_valid_from, :string)
+    field(:hospital_name, :string)
+    field(:employee_name, :string)
+    field(:patient_id, :string)
+    field(:rnokpp, :string)
+    field(:unzr, :string)
+    field(:patient_name, :string)
+    field(:patient_age, :string)
+    field(:medicine, :string)
+    field(:medication_qty, :string)
+    field(:dosage_instruction, :string)
+    field(:sign, :string)
   end
 
   @expiration_period_seconds 300
 
   def create_pending(tax_id, template_name, template_parameters, distribution_id) do
     changeset(%__MODULE__{}, %{
-      tax_id: tax_id,
-      template_name: template_name,
-      template_parameters: template_parameters,
+      rnokpp: tax_id,
       status: :pending,
-      distribution_id: distribution_id,
       created_at: NaiveDateTime.utc_now(),
-      status_timestamp: NaiveDateTime.utc_now()
+      changed_at: NaiveDateTime.utc_now(),
     })
   end
 
   def change_status(%__MODULE__{} = push_message, status) do
     changeset(push_message, %{
       status: status,
-      status_timestamp: NaiveDateTime.utc_now()
+      changed_at: NaiveDateTime.utc_now()
     })
   end
 
@@ -54,13 +60,10 @@ defmodule EHCS.UC6.PushMessage do
     push_message
     |> Changeset.change(attrs)
     |> Changeset.validate_required([
-      :tax_id,
-      :template_name,
-      :template_parameters,
+      :rnokpp,
+      :patient_name,
       :status,
-      :distribution_id,
-      :created_at,
-      :status_timestamp
+      :created_at
     ])
   end
 end
