@@ -1,4 +1,4 @@
-# EHCS.Diia33.API
+# EHCS.UC6.API
 
 To start your Phoenix server:
 
